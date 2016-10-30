@@ -3,23 +3,26 @@
 ## Data Structure
 
 * Period enum: {day, hour, minute}
+* Action enum: {buy, sell}
 * Quote: {symbol, datetime, high, low, volumn, period}
-* Order: list({symbol, amount, price})
-* News: {symbol, datetime, list({title, text)}
+* Order: {symbol, action, amount, price}
+* News: {symbol, list({datetime, title, text})}
 
 ## Class
 
 ### Market
-* execute_order(order, datetime, period): returns {executed order, cost}.
-  cost contains broker fees.
-* load_data(QuoteSource, symbol_list, start_datetime, end_datetime) virtual:
+* __init__(QuoteSource, order_cost): Market construction method
+* execute_order_list(order_list, datetime, period):
+  returns (executed_order_list, cash). If action is sell, cash is positive,
+  otherwise negative. cash includes broker fees as well
+* load_data(symbol_list, start_datetime, end_datetime):
   loads market data of a list of symbols from start_datetime to end_datetime.
-* get_quote virtual(datetime, period): returns a list of Quotes
+* get_quote_map(datetime, period): returns map<symbol, Quote>
 
 ### QuoteSource
 * load_data(symbol_list, start_datetime, end_datetime) virtual:
   loads market data of a list of symbols from start_datetime to end_datetime.
-* get_quote(datetime, period) virtual: returns a list of Quotes
+* get_quote_map(datetime, period) virtual: map<symbol, Quote>
 
 #### Implementation
 * YahooQuoteSource: Loads data from Yahoo (daily).
