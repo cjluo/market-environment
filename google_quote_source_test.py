@@ -48,6 +48,10 @@ class LoadData(unittest.TestCase):
 
         self.assertEqual(quotes_expected, str(quotes))
 
+    def test_datetime_list(self):
+        self.assertEqual(
+            43, len(self._quote_source.get_datetime_list(Period.day)))
+
 
 if __name__ == '__main__':
     unittest.main()

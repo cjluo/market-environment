@@ -10,6 +10,7 @@ class Period(Enum):
 class Action(Enum):
     buy = 1
     sell = 2
+    hold = 3
 
 
 class Market:
@@ -48,3 +49,6 @@ class Market:
                         cash += order['price'] - self._order_cost
 
         return execute_order_list, cash
+
+    def get_datetime_list(self, period):
+        return sorted(self._quote_source.get_datetime_list(period))

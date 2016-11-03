@@ -53,3 +53,8 @@ class GoogleQuoteSource(QuoteSource):
             symbol_map[quote['symbol']] = quote
 
         return symbol_map
+
+    def get_datetime_list(self, period):
+        if period != Period.day:
+            raise NotImplementedError
+        return self._quote_map.keys()

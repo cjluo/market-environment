@@ -12,6 +12,7 @@ date_format = "%Y-%m-%d"
 
 class YahooQuoteSource(QuoteSource):
     def __init__(self):
+        self._loaded_map = {}
         self._quote_map = {}
         self._loaded_symbol = Set()
 
@@ -38,9 +39,15 @@ class YahooQuoteSource(QuoteSource):
                 quote['close'] = float(
                     format(float(row[4]) * split_ratio, '.2f'))
                 quote['volume'] = int(row[5])
-                self._quote_map.setdefault(quote['datetime'], []).append(quote)
+                self._loaded_map.setdefault(
+                    quote['datetime'], []).append(quote)
 
         self._loaded_symbol.update(Set(symbol_list))
+
+        for loaded_datetime in self._loaded_map:
+            if start_datetime <= loaded_datetime <= end_datetime:
+                self._quote_map[loaded_datetime] = \
+                    self._loaded_map[loaded_datetime]
 
     def get_quote_map(self, quote_datetime, period):
         if period != Period.day:
@@ -57,3 +64,8 @@ class YahooQuoteSource(QuoteSource):
             symbol_map[quote['symbol']] = quote
 
         return symbol_map
+
+    def get_datetime_list(self, period):
+        if period != Period.day:
+            raise NotImplementedError
+        return self._quote_map.keys()

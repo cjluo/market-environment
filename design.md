@@ -18,11 +18,13 @@
 * load_data(symbol_list, start_datetime, end_datetime):
   loads market data of a list of symbols from start_datetime to end_datetime.
 * get_quote_map(datetime, period): returns map<symbol, Quote>
+* get_datetime_list(period) virtual: get a list of market opening periods
 
 ### QuoteSource
 * load_data(symbol_list, start_datetime, end_datetime) virtual:
   loads market data of a list of symbols from start_datetime to end_datetime.
 * get_quote_map(datetime, period) virtual: map<symbol, Quote>
+* get_datetime_list(period) virtual: get a list of market opening periods
 
 #### Implementation
 * YahooQuoteSource: Loads data from Yahoo (daily).

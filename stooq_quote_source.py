@@ -12,6 +12,7 @@ from quote_source import QuoteSource
 class StooqQuoteSource(QuoteSource):
     """Data downloaded from https://stooq.com/db/h/ and saved in stooq/"""
     def __init__(self):
+        self._loaded_map = {Period.day: {}, Period.hour: {}}
         self._quote_map = {Period.day: {}, Period.hour: {}}
         self._loaded_symbol = Set()
 
@@ -20,6 +21,12 @@ class StooqQuoteSource(QuoteSource):
         self.__load_data(unloaded_symbol_set, Period.day)
         self.__load_data(unloaded_symbol_set, Period.hour)
         self._loaded_symbol.update(Set(symbol_list))
+
+        for period in [Period.day, Period.hour]:
+            for loaded_datetime in self._loaded_map[period]:
+                if start_datetime <= loaded_datetime <= end_datetime:
+                    self._quote_map[period][loaded_datetime] = \
+                        self._loaded_map[period][loaded_datetime]
 
     def __load_data(self, symbol_list, period):
         if period == Period.day:
@@ -58,7 +65,7 @@ class StooqQuoteSource(QuoteSource):
                     quote['low'] = float(row[row_base + 2])
                     quote['close'] = float(row[row_base + 3])
                     quote['volume'] = int(row[row_base + 4])
-                    self._quote_map[period].setdefault(
+                    self._loaded_map[period].setdefault(
                         quote['datetime'], []).append(quote)
 
     def get_quote_map(self, quote_datetime, period):
@@ -83,3 +90,6 @@ class StooqQuoteSource(QuoteSource):
             symbol_map[quote['symbol']] = quote
 
         return symbol_map
+
+    def get_datetime_list(self, period):
+        return self._quote_map[period].keys()

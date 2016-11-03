@@ -9,6 +9,9 @@ class LoadData(unittest.TestCase):
     def setUp(self):
         self._quote_source = StooqQuoteSource()
         self._quote_source.load_data(['TWTR', 'AAPL'],
+                                     datetime(2016, 10, 1, 1, 1, 1),
+                                     datetime(2016, 10, 4, 2, 2, 2))
+        self._quote_source.load_data(['TWTR', 'AAPL'],
                                      datetime(2016, 1, 1, 1, 1, 1),
                                      datetime(2016, 2, 2, 2, 2, 2))
         self._quote_source.load_data(['TWTR', 'AAPL'],
@@ -61,6 +64,12 @@ class LoadData(unittest.TestCase):
         quotes_expected = "{}"
 
         self.assertEqual(quotes_expected, str(quotes))
+
+    def test_datetime_list(self):
+        self.assertEqual(
+            45, len(self._quote_source.get_datetime_list(Period.day)))
+        self.assertEqual(
+            7, len(self._quote_source.get_datetime_list(Period.hour)))
 
 
 if __name__ == '__main__':
