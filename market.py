@@ -44,9 +44,11 @@ class Market:
                 if order_executed:
                     execute_order_list.append(order)
                     if order['action'] == Action.buy:
-                        cash -= order['price'] + self._order_cost
+                        cash -= order['price'] * order['amount'] \
+                            + self._order_cost
                     else:
-                        cash += order['price'] - self._order_cost
+                        cash += order['price'] * order['amount'] \
+                            - self._order_cost
 
         return execute_order_list, cash
 

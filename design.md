@@ -4,7 +4,7 @@
 
 * Period enum: {day, hour, minute}
 * Action enum: {buy, sell}
-* Quote: {symbol, datetime, high, low, volumn, period}
+* Quote: {symbol, datetime, open, high, low, close, volumn, period}
 * Order: {symbol, action, amount, price}
 * News: {symbol, list({datetime, title, text})}
 
