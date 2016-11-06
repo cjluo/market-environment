@@ -1,4 +1,4 @@
-class QuoteSource:
+class QuoteSource(object):
     def load_data(self, symbol_list, start_datetime, end_datetime):
         raise NotImplementedError
 

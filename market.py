@@ -13,7 +13,7 @@ class Action(Enum):
     hold = 3
 
 
-class Market:
+class Market(object):
     def __init__(self, quote_source, order_cost):
         self._quote_source = quote_source
         self._order_cost = order_cost
