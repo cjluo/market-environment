@@ -2,15 +2,15 @@ from enum import Enum
 
 
 class Period(Enum):
-    day = 1
-    hour = 2
-    minute = 3
+    day = 0
+    hour = 1
+    minute = 2
 
 
 class Action(Enum):
+    hold = 0
     buy = 1
     sell = 2
-    hold = 3
 
 
 class Market(object):
