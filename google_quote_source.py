@@ -37,7 +37,7 @@ class GoogleQuoteSource(QuoteSource):
                 quote['low'] = float(row[3])
                 quote['close'] = float(row[4])
                 if row[5] == '-':
-                    quote['volume'] = -1
+                    quote['volume'] = 0
                 else:
                     quote['volume'] = int(row[5])
                 self._quote_map.setdefault(quote['datetime'], []).append(quote)
