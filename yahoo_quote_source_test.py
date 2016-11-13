@@ -8,10 +8,10 @@ from market import Period
 class LoadData(unittest.TestCase):
     def setUp(self):
         self._quote_source = YahooQuoteSource()
-        self._quote_source.load_data(['TWTR', 'AAPL'],
+        self._quote_source.load_data(['TWTR', 'GOOG'],
                                      datetime(2016, 1, 1, 1, 1, 1),
                                      datetime(2016, 2, 2, 2, 2, 2))
-        self._quote_source.load_data(['TWTR', 'AAPL'],
+        self._quote_source.load_data(['TWTR', 'GOOG'],
                                      datetime(2013, 1, 1, 1, 1, 1),
                                      datetime(2013, 2, 2, 2, 2, 2))
 
@@ -20,12 +20,12 @@ class LoadData(unittest.TestCase):
             datetime(2016, 2, 1, 1, 1, 1), Period.day)
 
         quotes_expected = (
-            "{'TWTR': {'volume': 49994400, 'symbol': 'TWTR', 'datetime': "
+            "{'GOOG': {'volume': 5139200, 'symbol': 'GOOG', 'datetime': "
+            "datetime.datetime(2016, 2, 1, 0, 0), 'high': 757.86, 'low': "
+            "743.27, 'close': 752.0, 'open': 750.46}, 'TWTR': {'volume': "
+            "49994400, 'symbol': 'TWTR', 'datetime': "
             "datetime.datetime(2016, 2, 1, 0, 0), 'high': 18.77, 'low': 17.3, "
-            "'close': 17.91, 'open': 17.89}, 'AAPL': {'volume': 40943500, "
-            "'symbol': 'AAPL', 'datetime': "
-            "datetime.datetime(2016, 2, 1, 0, 0), 'high': 95.09, 'low': 93.8, "
-            "'close': 94.82, 'open': 94.85}}")
+            "'close': 17.91, 'open': 17.89}}")
 
         self.assertEqual(quotes_expected, str(quotes))
 
@@ -42,9 +42,9 @@ class LoadData(unittest.TestCase):
             datetime(2013, 2, 1, 1, 1, 1), Period.day)
 
         quotes_expected = (
-            "{'AAPL': {'volume': 134871100, 'symbol': 'AAPL', 'datetime': "
-            "datetime.datetime(2013, 2, 1, 0, 0), 'high': 60.63, 'low': "
-            "59.16, 'close': 59.86, 'open': 60.58}}")
+            "{'GOOG': {'volume': 7520100, 'symbol': 'GOOG', 'datetime': "
+            "datetime.datetime(2013, 2, 1, 0, 0), 'high': 387.91, 'low': "
+            "378.67, 'close': 387.41, 'open': 378.72}}")
 
         self.assertEqual(quotes_expected, str(quotes))
 

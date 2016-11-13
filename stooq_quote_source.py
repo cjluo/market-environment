@@ -30,9 +30,9 @@ class StooqQuoteSource(QuoteSource):
 
     def __load_data(self, symbol_list, period):
         if period == Period.day:
-            data_asset = 'stooq/d_us_txt.zip'
+            data_asset = 'market/stooq/d_us_txt.zip'
         elif period == Period.hour:
-            data_asset = 'stooq/h_us_txt.zip'
+            data_asset = 'market/stooq/h_us_txt.zip'
         else:
             raise NotImplementedError
 

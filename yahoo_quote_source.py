@@ -19,8 +19,11 @@ class YahooQuoteSource(QuoteSource):
     def load_data(self, symbol_list, start_datetime, end_datetime):
         unloaded_symbol_set = Set(symbol_list).difference(self._loaded_symbol)
         for symbol in unloaded_symbol_set:
-            response = urllib2.urlopen(
-                'http://ichart.finance.yahoo.com/table.csv?s=%s' % symbol)
+
+            url = ('http://ichart.finance.yahoo.com/table.csv?s=%s' % symbol)
+            print "%s: %s" % (symbol, url)
+
+            response = urllib2.urlopen(url)
             reader = csv.reader(response)
             next(reader, None)
             for row in reader:
