@@ -15,13 +15,17 @@ class GoogleQuoteSource(QuoteSource):
 
     def load_data(self, symbol_list, start_datetime, end_datetime):
         for symbol in symbol_list:
-            response = urllib2.urlopen(
+
+            url = (
                 'http://www.google.com/finance/historical'
                 '?q=%s&histperiod=daily&startdate=%s&enddate=%s'
-                '&output=csv' % (
+                '&output=csv') % (
                     symbol,
                     start_datetime.strftime(date_format),
-                    end_datetime.strftime(date_format)))
+                    end_datetime.strftime(date_format))
+            print "%s: %s" % (symbol, url)
+
+            response = urllib2.urlopen(url)
             reader = csv.reader(response)
             next(reader, None)
             for row in reader:
