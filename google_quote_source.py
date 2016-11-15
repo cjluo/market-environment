@@ -32,9 +32,17 @@ class GoogleQuoteSource(QuoteSource):
                 quote = {}
                 quote['symbol'] = symbol
                 quote['datetime'] = datetime.strptime(row[0], "%d-%b-%y")
+                if row[1] == '-':
+                    continue
                 quote['open'] = float(row[1])
+                if row[2] == '-':
+                    continue
                 quote['high'] = float(row[2])
+                if row[3] == '-':
+                    continue
                 quote['low'] = float(row[3])
+                if row[4] == '-':
+                    continue
                 quote['close'] = float(row[4])
                 if row[5] == '-':
                     quote['volume'] = 0
