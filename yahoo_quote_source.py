@@ -18,32 +18,36 @@ class YahooQuoteSource(QuoteSource):
 
     def load_data(self, symbol_list, start_datetime, end_datetime):
         unloaded_symbol_set = Set(symbol_list).difference(self._loaded_symbol)
+        data_path = 'market/yahoo/'
         for symbol in unloaded_symbol_set:
 
-            url = ('http://ichart.finance.yahoo.com/table.csv?s=%s' % symbol)
-            print "%s: %s" % (symbol, url)
+            # http://ichart.finance.yahoo.com/table.csv?s=symbol
+            # is no longer valid.
 
-            response = urllib2.urlopen(url)
-            reader = csv.reader(response)
-            next(reader, None)
-            for row in reader:
-                quote = {}
-                quote['symbol'] = symbol
-                quote['datetime'] = datetime.strptime(row[0], date_format)
-
-                split_ratio = float(row[6]) / float(row[4])
-
-                quote['open'] = float(
-                    format(float(row[1]) * split_ratio, '.2f'))
-                quote['high'] = float(
-                    format(float(row[2]) * split_ratio, '.2f'))
-                quote['low'] = float(
-                    format(float(row[3]) * split_ratio, '.2f'))
-                quote['close'] = float(
-                    format(float(row[4]) * split_ratio, '.2f'))
-                quote['volume'] = int(row[5])
-                self._loaded_map.setdefault(
-                    quote['datetime'], []).append(quote)
+            file = data_path + symbol + '.csv'
+            try:
+                with open(file, 'r') as data:
+                    reader = csv.reader(data)
+                    next(reader, None)
+                    for row in reader:
+                        if not row:
+                            continue
+                        quote = {}
+                        quote['symbol'] = symbol
+                        quote['datetime'] = datetime.strptime(
+                            row[0], "%Y-%m-%d")
+                        row_base = 1
+                        quote['open'] = float(row[row_base])
+                        quote['high'] = float(row[row_base + 1])
+                        quote['low'] = float(row[row_base + 2])
+                        quote['close'] = float(row[row_base + 3])
+                        quote['volume'] = int(row[row_base + 5])
+                        self._loaded_map.setdefault(
+                            quote['datetime'], []).append(quote)
+            except EnvironmentError:
+                print("%s not found. Please download the csv from "
+                      "https://finance.yahoo.com/quote/%s/history" % (
+                          file, symbol))
 
         self._loaded_symbol.update(Set(symbol_list))
 

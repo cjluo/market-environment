@@ -21,11 +21,11 @@ class LoadData(unittest.TestCase):
 
         quotes_expected = (
             "{'GOOG': {'volume': 5139200, 'symbol': 'GOOG', 'datetime': "
-            "datetime.datetime(2016, 2, 1, 0, 0), 'high': 757.86, 'low': "
-            "743.27, 'close': 752.0, 'open': 750.46}, 'TWTR': {'volume': "
-            "49994400, 'symbol': 'TWTR', 'datetime': "
-            "datetime.datetime(2016, 2, 1, 0, 0), 'high': 18.77, 'low': 17.3, "
-            "'close': 17.91, 'open': 17.89}}")
+            "datetime.datetime(2016, 2, 1, 0, 0), 'high': 757.859985, 'low': "
+            "743.27002, 'close': 752.0, 'open': 750.460022}, 'TWTR': "
+            "{'volume': 49994400, 'symbol': 'TWTR', 'datetime': "
+            "datetime.datetime(2016, 2, 1, 0, 0), 'high': 18.77, 'low': "
+            "17.299999, 'close': 17.91, 'open': 17.889999}}")
 
         self.assertEqual(quotes_expected, str(quotes))
 
@@ -43,8 +43,8 @@ class LoadData(unittest.TestCase):
 
         quotes_expected = (
             "{'GOOG': {'volume': 7520100, 'symbol': 'GOOG', 'datetime': "
-            "datetime.datetime(2013, 2, 1, 0, 0), 'high': 387.91, 'low': "
-            "378.67, 'close': 387.41, 'open': 378.72}}")
+            "datetime.datetime(2013, 2, 1, 0, 0), 'high': 386.850006, "
+            "'low': 377.634521, 'close': 773.476501, 'open': 377.684357}}")
 
         self.assertEqual(quotes_expected, str(quotes))
 
