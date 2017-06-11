@@ -1,5 +1,4 @@
 import csv
-import urllib2
 
 from datetime import datetime
 from sets import Set
@@ -10,6 +9,35 @@ from quote_source import QuoteSource
 date_format = "%Y-%m-%d"
 
 
+def load_data_from_csv(symbol):
+    data_path = 'market/yahoo/'
+    file = data_path + symbol + '.csv'
+    quotes = []
+    try:
+        with open(file, 'r') as data:
+            reader = csv.reader(data)
+            next(reader, None)
+            for row in reader:
+                if not row:
+                    continue
+                quote = {}
+                quote['symbol'] = symbol
+                quote['datetime'] = datetime.strptime(
+                    row[0], "%Y-%m-%d")
+                row_base = 1
+                quote['open'] = float(row[row_base])
+                quote['high'] = float(row[row_base + 1])
+                quote['low'] = float(row[row_base + 2])
+                quote['close'] = float(row[row_base + 3])
+                quote['volume'] = int(row[row_base + 5])
+                quotes.append(quote)
+    except EnvironmentError:
+        print("%s not found. Please download the csv from "
+              "https://finance.yahoo.com/quote/%s/history" % (
+                  file, symbol))
+    return quotes
+
+
 class YahooQuoteSource(QuoteSource):
     def __init__(self):
         self._loaded_map = {}
@@ -18,36 +46,11 @@ class YahooQuoteSource(QuoteSource):
 
     def load_data(self, symbol_list, start_datetime, end_datetime):
         unloaded_symbol_set = Set(symbol_list).difference(self._loaded_symbol)
-        data_path = 'market/yahoo/'
         for symbol in unloaded_symbol_set:
-
-            # http://ichart.finance.yahoo.com/table.csv?s=symbol
-            # is no longer valid.
-
-            file = data_path + symbol + '.csv'
-            try:
-                with open(file, 'r') as data:
-                    reader = csv.reader(data)
-                    next(reader, None)
-                    for row in reader:
-                        if not row:
-                            continue
-                        quote = {}
-                        quote['symbol'] = symbol
-                        quote['datetime'] = datetime.strptime(
-                            row[0], "%Y-%m-%d")
-                        row_base = 1
-                        quote['open'] = float(row[row_base])
-                        quote['high'] = float(row[row_base + 1])
-                        quote['low'] = float(row[row_base + 2])
-                        quote['close'] = float(row[row_base + 3])
-                        quote['volume'] = int(row[row_base + 5])
-                        self._loaded_map.setdefault(
-                            quote['datetime'], []).append(quote)
-            except EnvironmentError:
-                print("%s not found. Please download the csv from "
-                      "https://finance.yahoo.com/quote/%s/history" % (
-                          file, symbol))
+            quotes = load_data_from_csv(symbol)
+            for quote in quotes:
+                self._loaded_map.setdefault(
+                    quote['datetime'], []).append(quote)
 
         self._loaded_symbol.update(Set(symbol_list))
 
@@ -55,6 +58,9 @@ class YahooQuoteSource(QuoteSource):
             if start_datetime <= loaded_datetime <= end_datetime:
                 self._quote_map[loaded_datetime] = \
                     self._loaded_map[loaded_datetime]
+
+    def get_symbol_data(self, symbol):
+        return load_data_from_csv(symbol)
 
     def get_quote_map(self, quote_datetime, period):
         if period != Period.day:

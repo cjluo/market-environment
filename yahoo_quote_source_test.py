@@ -52,6 +52,13 @@ class LoadData(unittest.TestCase):
         self.assertEqual(
             43, len(self._quote_source.get_datetime_list(Period.day)))
 
+    def test_load_single_quote(self):
+        self.assertEqual(
+            "{'volume': 44871300, 'symbol': 'GOOG', 'datetime': "
+            "datetime.datetime(2004, 8, 19, 0, 0), 'high': 51.835709, "
+            "'low': 47.800831, 'close': 100.065277, 'open': 49.813286}", str(
+                self._quote_source.get_symbol_data('GOOG')[0]))
+
 
 if __name__ == '__main__':
     unittest.main()
