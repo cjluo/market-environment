@@ -1,4 +1,5 @@
 import csv
+import sys
 
 from datetime import datetime
 from sets import Set
@@ -22,19 +23,23 @@ def load_data_from_csv(symbol):
                     continue
                 quote = {}
                 quote['symbol'] = symbol
-                quote['datetime'] = datetime.strptime(
-                    row[0], "%Y-%m-%d")
-                row_base = 1
-                quote['open'] = float(row[row_base])
-                quote['high'] = float(row[row_base + 1])
-                quote['low'] = float(row[row_base + 2])
-                quote['close'] = float(row[row_base + 3])
-                quote['volume'] = int(row[row_base + 5])
+                try:
+                    quote['datetime'] = datetime.strptime(
+                        row[0], "%Y-%m-%d")
+                    row_base = 1
+                    quote['open'] = float(row[row_base])
+                    quote['high'] = float(row[row_base + 1])
+                    quote['low'] = float(row[row_base + 2])
+                    quote['close'] = float(row[row_base + 4])
+                    quote['volume'] = int(row[row_base + 5])
+                except ValueError:
+                    continue
                 quotes.append(quote)
     except EnvironmentError:
         print("%s not found. Please download the csv from "
               "https://finance.yahoo.com/quote/%s/history" % (
                   file, symbol))
+        sys.exit(-1)
     return quotes
 
 
