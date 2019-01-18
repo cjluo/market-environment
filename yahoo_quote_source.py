@@ -27,10 +27,13 @@ def load_data_from_csv(symbol):
                     quote['datetime'] = datetime.strptime(
                         row[0], "%Y-%m-%d")
                     row_base = 1
-                    quote['open'] = float(row[row_base])
-                    quote['high'] = float(row[row_base + 1])
-                    quote['low'] = float(row[row_base + 2])
-                    quote['close'] = float(row[row_base + 4])
+                    real_close = float(row[row_base + 3])
+                    adj_close = float(row[row_base + 4])
+                    adj_ratio = adj_close / real_close;
+                    quote['open'] = float(row[row_base]) * adj_ratio
+                    quote['high'] = float(row[row_base + 1]) * adj_ratio
+                    quote['low'] = float(row[row_base + 2]) * adj_ratio
+                    quote['close'] = adj_close
                     quote['volume'] = int(row[row_base + 5])
                 except ValueError:
                     continue
